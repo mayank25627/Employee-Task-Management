@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Task</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      text-align: center;
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      width: 400px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #333;
+      text-shadow: 2px 2px #ccc;
+      margin-bottom: 1em;
+    }
+
+    .form-group {
+      margin-bottom: 1.5em;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.5em;
+    }
+
+    .form-group input {
+      width: calc(100% - 20px);
+      padding: 8px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 1em;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #45a049;
+    }
+
+    .button:active {
+      transform: translateY(2px);
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    }
+	#employee-dashboard {
+	  background-color: #4CAF50;
+	  color: #fff;
+			           padding: 10px 20px;
+			           border: none;
+			           border-radius: 5px;
+			           cursor: pointer;
+			           position: absolute;
+			           right: 20px;
+			           top: 15px;
+			       }
+  </style>
+</head>
+<body>
+
+<div class="container">
+	<button id="employee-dashboard">Employee Dashboard</button>
+  <h1>Add New Task</h1>
+  <form id="add-task-form">
+    <div class="form-group">
+      <label for="taskName">Task Name:</label>
+      <input type="text" id="taskName" name="taskName" required>
+    </div>
+    <div class="form-group">
+      <label for="taskStatus">Task Status:</label>
+      <input type="text" id="taskStatus" name="taskStatus" required>
+    </div>
+    <button type="submit" class="button">Add Task</button>
+  </form>
+</div>
+
+<script>
+	document.getElementById("employee-dashboard").addEventListener("click", function() {
+	      window.location.href = "/employee-dashboard.html";
+	    });
+  document.getElementById("add-task-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    let taskName = document.getElementById("taskName").value;
+    let taskStatus = document.getElementById("taskStatus").value;
+
+    fetch('/employeeLog/addTask', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        taskName: taskName,
+        taskStatus: taskStatus
+      })
+    })
+    .then(response => response.text())
+    .then(data => {
+      alert(data); // Display success or failure message
+      // Optionally redirect to another page after task added
+      // window.location.href = '/employee-dashboard.html';
+    })
+    .catch(error => {
+      console.error('Error adding task:', error);
+      alert('Failed to add task. Please try again.');
+    });
+  });
+</script>
+
+</body>
+</html>

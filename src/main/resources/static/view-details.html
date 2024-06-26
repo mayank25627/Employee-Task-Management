@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      text-align: center;
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #333;
+      text-shadow: 2px 2px #ccc;
+      margin-bottom: 1em;
+    }
+
+    .details {
+      font-size: 1.2em;
+      color: #333;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .details p {
+      margin: 10px 0;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+    }
+
+    .button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 10px;
+      border-radius: 5px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1em;
+    }
+
+    .button:hover {
+      background-color: #45a049;
+    }
+
+    .button:active {
+      transform: translateY(2px);
+      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+	#employee-dashboard {
+			           background-color: #4CAF50;
+			           color: #fff;
+			           padding: 10px 20px;
+			           border: none;
+			           border-radius: 5px;
+			           cursor: pointer;
+			           position: absolute;
+			           right: 20px;
+			           top: 15px;
+			       }
+  </style>
+</head>
+<body>
+
+  <button id="employee-dashboard">Employee Dashboard</button>
+
+  <div class="container">
+    <h1>Employee Details</h1>
+    <div class="details">
+      <p><strong>Name:</strong> <span id="employee-name"></span></p>
+      <p><strong>Email:</strong> <span id="employee-email"></span></p>
+      <p><strong>Phone:</strong> <span id="employee-phone"></span></p>
+      <p><strong>Address:</strong> <span id="employee-address"></span></p>
+      <p><strong>Your Admin:</strong> <span id="admin-name"></span></p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      fetch('/employeeLog/getCurrentEmployee')
+        .then(response => response.json())
+        .then(employee => {
+          document.getElementById('employee-name').textContent = employee.name;
+          document.getElementById('employee-email').textContent = employee.email;
+          document.getElementById('employee-phone').textContent = employee.phone;
+          document.getElementById('employee-address').textContent = employee.address;
+
+          fetch(`/employeeLog/getAdmin/${employee.adminId}`)
+            .then(response => response.json())
+            .then(admin => {
+              document.getElementById('admin-name').textContent = admin.name;
+            })
+            .catch(error => console.error('Error fetching admin:', error));
+        })
+        .catch(error => console.error('Error fetching employee:', error));
+    });
+
+    document.getElementById("employee-dashboard").addEventListener("click", function() {
+      window.location.href = "/employee-dashboard.html";
+    });
+  </script>
+
+</body>
+</html>

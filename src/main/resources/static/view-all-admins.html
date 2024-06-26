@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View All Admins</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      width: 80%;
+      max-width: 800px;
+    }
+
+    h1 {
+      font-size: 2em;
+      color: #333;
+      text-shadow: 2px 2px #ccc;
+      margin-bottom: 1em;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1em;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+	#super-admin-dashboard {
+	           background-color: #4CAF50;
+	           color: #fff;
+	           padding: 10px 20px;
+	           border: none;
+	           border-radius: 5px;
+	           cursor: pointer;
+	           position: absolute;
+	           right: 20px;
+	           top: 15px;
+	       }
+  </style>
+</head>
+<body>
+	
+	<button id="super-admin-dashboard">Super Admin Dashboard</button>
+
+  <div class="container">
+    <h1>All Admins</h1>
+    <table id="admins-table">
+      <thead>
+        <tr>
+          <th>Admin ID</th>
+          <th>Admin Name</th>
+          <th>Admin Email</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Accepted admins will be inserted here dynamically -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+	document.getElementById("super-admin-dashboard").addEventListener("click", function() {
+	            window.location.href = "/super-admin-dashboard.html";
+	        });
+			
+    document.addEventListener("DOMContentLoaded", function() {
+      fetchAcceptedAdmins();
+
+      async function fetchAcceptedAdmins() {
+        try {
+          const response = await fetch('/superAdmin/acceptedAdmins');
+          const admins = await response.json();
+          const tableBody = document.getElementById('admins-table').querySelector('tbody');
+          tableBody.innerHTML = '';
+
+          admins.forEach(admin => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+              <td>${admin.adminId}</td>
+              <td>${admin.name}</td>
+              <td>${admin.email}</td>
+              <td>${admin.isEnable}</td>
+            `;
+
+            tableBody.appendChild(row);
+          });
+        } catch (error) {
+          console.error('Error fetching accepted admins:', error);
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
